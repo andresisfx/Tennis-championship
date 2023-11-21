@@ -1,5 +1,5 @@
 import './globals.css'
-import SessionProvider from './SesionProvider';
+import SessionProvider from './SessionProvider';
 
 
 export default async function RootLayout({
