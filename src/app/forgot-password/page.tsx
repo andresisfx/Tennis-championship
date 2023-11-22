@@ -2,12 +2,28 @@
 import { useState } from 'react';
 import { auth } from '../firebase';
 import { sendPasswordResetEmail } from "firebase/auth";
+import { useRouter } from 'next/navigation';
+
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
-
-  const resetEmail = () => {
-    sendPasswordResetEmail(auth, email);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const router = useRouter()
+  const resetEmail = async() => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setSuccessMessage('Please check out your email and log in');
+      alert('Please checkout your email' );
+      setErrorMessage('');  
+      router.push('signin')
+      
+      setEmail('');
+    } catch (error:any) {
+      alert('smething went wrong, maybe your email is not registered' );
+      setErrorMessage('Hubo un error al enviar el correo electrónico de restablecimiento. Verifica la dirección de correo electrónico e inténtalo de nuevo.');
+      setSuccessMessage(''); 
+    }
   };
 
   return (
@@ -51,6 +67,13 @@ export default function ForgotPassword() {
               >
                 Send Forgot Password Email
               </button>
+              {successMessage && (
+              <div className="text-green-500 text-center">{successMessage}</div>
+            )}
+
+            {errorMessage && (
+              <div className="text-red-500 text-center">{errorMessage}</div>
+            )}
             </div>
           </div>
         </div>

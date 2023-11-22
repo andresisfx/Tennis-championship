@@ -1,18 +1,43 @@
 'use client';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, updateProfile  } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { auth } from '../firebase';
+import { db } from '../firebase';
+import { doc, setDoc } from 'firebase/firestore'
 
 function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordAgain, setPasswordAgain] = useState('');
+  const router= useRouter()
 
-  const signup = () => {
-    createUserWithEmailAndPassword(auth, email, password);
-  };
+  const signUp = async (em:any, pass:any, rol:any) => {
+    const auth = getAuth();
+    
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, em, pass);
+      const user = userCredential.user;
   
+      // Actualizar el perfil del usuario con el rol
+      await updateProfile(user, { displayName: rol });
+  
+      // Guardar información adicional en Firestore
+      await setDoc(doc(db, 'usersRole', user.uid), {
+        email: user.email,
+        rol: rol,
+      });
+  
+      alert('User succesfully registered');
+      router.push('signin')
+    } catch (error:any) {
+      setEmail("");
+      setPassword(""),
+      setPasswordAgain("")
+      alert('Something went wrong, user not registered' );
+    }
+  };
+
   return (
     <>
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -86,7 +111,7 @@ function Signup() {
             <div>
               <button
                 disabled={(!email || !password || !passwordAgain) || (password !== passwordAgain)}
-                onClick={() => signup()}
+                onClick={() => signUp(email,password,"user")}
                 className="disabled:opacity-40 flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
               >
                 Sign Up
