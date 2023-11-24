@@ -3,11 +3,22 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import { getDocs, collection } from 'firebase/firestore';
 import MyForm from './register';
+import { signOut, useSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
+
+
+
+
 
 const TournamentPanel = () => {
+  const session = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect('/signin');
+    },
+  });
   const [championships, setChampionships] = useState([]);
   const [tournamentFormInfo, setTournamentFormInfo] = useState({ showForm: false, tournamentId: null });
-console.log(tournamentFormInfo)
   const getTournaments = async () => {
     const response = collection(db, 'championships');
     const tournamentsSnapshot = await getDocs(response);
@@ -30,6 +41,10 @@ console.log(tournamentFormInfo)
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="p-8">
+          <div className='text-white'>{session?.data?.user?.email }</div>
+          <button className='text-white' onClick={() => signOut()}>Logout</button>
+      </div>
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img
           className="mx-auto h-10 w-auto"
@@ -63,5 +78,5 @@ console.log(tournamentFormInfo)
     </div>
   );
 };
-
+TournamentPanel.requireAuth = true
 export default TournamentPanel;

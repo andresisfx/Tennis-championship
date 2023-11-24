@@ -1,21 +1,25 @@
 'use client';
 import React, { useState } from 'react';
 import { db,  } from '../firebase';
-import { query, collection, where, getDocs, addDoc } from 'firebase/firestore';
+import { query, collection, where, getDocs, setDoc,doc } from 'firebase/firestore';
+import { useRouter } from 'next/navigation';
 
 
 const CreateChampionship = () => {
   const [championshipName, setChampionshipName] = useState('');
+  const router =useRouter();
+ 
 
-  const handleSubmit= async () => {
+  const handleSubmit= async (e) => {
+    e.preventDefault();
     if (!championshipName) {
       alert('Please enter the championship name.');
       return;
     }
 
     try {
-      await addDoc(collection(db, 'championships'), {
-        name: championshipName,
+      await setDoc(doc(db, 'championships',championshipName.toString()), {
+        participants:"",
         
       });
       alert('Championship created successfully.');
