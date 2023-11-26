@@ -108,6 +108,12 @@ useEffect(() => {
  
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+       <button
+      className="w-1/4 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:border-blue-500 focus:ring-blue-500"
+      onClick={() => router.push('/admin')}
+    >
+      Go Back to Admin Panel
+    </button>
     <div className="sm:mx-auto sm:w-full sm:max-w-sm">
       <img
         className=" mx-auto  h-10 w-auto"
