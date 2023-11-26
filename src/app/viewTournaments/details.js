@@ -23,7 +23,7 @@ const ParticipantsList = ({ tournamentId }) => {
     const participantsData = initialParticipants.docs.map((doc) => ({ id: doc.id, ...doc.data(), editedScore: '', isScoreValid: true }));
     setParticipants(participantsData);
   };
-
+// eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     getParticipants();
   }, [tournamentId]);

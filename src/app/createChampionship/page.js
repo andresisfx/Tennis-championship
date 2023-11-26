@@ -51,6 +51,7 @@ const CreateChampionship = () => {
  }
 
 }
+// eslint-disable-next-line react-hooks/exhaustive-deps
 useEffect(() => {
  const verificarSesion = async () => {
    if (session?.data?.user?.email) {
@@ -65,9 +66,7 @@ useEffect(() => {
    verificarSesion();
  }
 }, [loading, session]);
- const handleButtonClick = (path) => {
-   router.push(path);
- };
+ 
 if(loading||userRole){
  return(
    <>

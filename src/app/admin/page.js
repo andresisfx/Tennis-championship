@@ -52,6 +52,7 @@ const AdminPanel = () => {
   }
 
 }
+// eslint-disable-next-line react-hooks/exhaustive-deps
 useEffect(() => {
   const verificarSesion = async () => {
     if (session?.data?.user?.email) {
