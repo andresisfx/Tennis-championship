@@ -4,7 +4,6 @@ import { useEffect,useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
-import adminAllowed from "../signup/guard"
 import { query, collection, where, getDocs, setDoc,doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import Loading from "../signin/loading"
