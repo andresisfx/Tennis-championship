@@ -1,13 +1,82 @@
 'use client';
-import React, { useState } from 'react';
-import { db,  } from '../firebase';
+import React, { useState,useEffect } from 'react';
 import { query, collection, where, getDocs, setDoc,doc } from 'firebase/firestore';
-import { useRouter } from 'next/navigation';
-
+import { signOut, useSession } from 'next-auth/react';
+import { redirect,useRouter } from 'next/navigation';
+import { db } from '../firebase';
+import Loading from "../signin/loading"
 
 const CreateChampionship = () => {
+
+  const[userRole,setuserRole]=useState(true)
+  const[loading,setLoading]=useState(false)
+   const session = useSession({
+       required: true,
+       onUnauthenticated() {
+         redirect('/signin');
+       },}) 
+
+  const router = useRouter();
+  const adminAllowed = async (email) => {
+   try {
+   const usersRef = collection(db, 'usersRole');
+   const emailToSignQuery = query(usersRef, where('email', '==',email.toString()));
+
+   const querySnapshot = await getDocs(emailToSignQuery);
+
+   if (!querySnapshot.empty) {
+     setuserRole(false)
+     const userDoc = querySnapshot.docs[0];
+     const userData = userDoc.data();
+    console.log(userData.role)
+        
+     if (userData.role !== 'admin') {
+    console.log("redireccionando")
+       router.push('/signin');
+       
+     } else {
+       console.log("no entre al condicional del rol")
+       
+       
+     }
+   } else {
+     alert('User not found.');
+     return false;
+   }
+ } catch (error) {
+   // Maneja cualquier error relacionado con la consulta o autenticación
+   console.error('Error:', error.message);
+   alert('An error occurred. Please try again.');
+   return false;
+ }
+
+}
+useEffect(() => {
+ const verificarSesion = async () => {
+   if (session?.data?.user?.email) {
+     adminAllowed(session.data.user.email);
+   }
+   setLoading(false);
+ };
+
+ if (!loading) {
+   setLoading(true);
+
+   verificarSesion();
+ }
+}, [loading, session]);
+ const handleButtonClick = (path) => {
+   router.push(path);
+ };
+if(loading||userRole){
+ return(
+   <>
+      <Loading></Loading>
+   </>
+ )
+}
   const [championshipName, setChampionshipName] = useState('');
-  const router =useRouter();
+ 
  
 
   const handleSubmit= async (e) => {
@@ -65,8 +134,9 @@ const CreateChampionship = () => {
         </button>
       </div>
     </form>
+    
   </div>
   );
 };
-
+CreateChampionship.requireAuth=true
 export default CreateChampionship;

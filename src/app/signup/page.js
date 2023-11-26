@@ -19,13 +19,13 @@ function Signup() {
       const userCredential = await createUserWithEmailAndPassword(auth, em, pass);
       const user = userCredential.user;
   
-      // Actualizar el perfil del usuario con el rol
-      await updateProfile(user, { displayName: rol });
+      
+      
   
       // Guardar información adicional en Firestore
       await setDoc(doc(db, 'usersRole', user.uid), {
         email: user.email,
-        rol: rol,
+        role:rol,
       });
   
       alert('User succesfully registered');

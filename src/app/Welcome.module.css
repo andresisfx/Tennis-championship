@@ -1,0 +1,13 @@
+@keyframes move1 {
+  0%, 100% {
+    left: 10%; /* Ajusta según sea necesario */
+  }
+  50% {
+    left: 90%; /* Ajusta según sea necesario */
+  }
+}
+
+.animate-move1 {
+  animation: move1 4s infinite linear;
+}
+  

@@ -91,36 +91,55 @@
 //   )
 // }
 'use client';
-// @refresh reset
+
 
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useEffect } from 'react';
+import { query, collection, where, getDocs, setDoc,doc } from 'firebase/firestore';
+import { db } from '../firebase';
+
+
+
 export default function Signin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter(); 
   
-  useEffect(() => {
-    if(router.query){
-    const { error } = router.query;
-    
-    if (error) {
-      alert('Invalid email or password');
-    }}
-  }, [router.query]);
-  const handleSignIn = async (e) => {
-    e.preventDefault(); 
 
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+  
     try {
-      await signIn('credentials', { email, password, redirect: true, callbackUrl: '/' });
+      const usersRef = collection(db, 'usersRole');
+      const emailToSignQuery = query(usersRef, where('email', '==', email.toString()));
+  
+      const querySnapshot = await getDocs(emailToSignQuery);
+  
+      if (!querySnapshot.empty) {
+        const userDoc = querySnapshot.docs[0];
+        const userData = userDoc.data();
+        console.log(userData.role)
+        userData.role === 'admin'
+        ? await signIn('credentials', { email, password, redirect: true, callbackUrl: '/admin' })
+        : userData.role === 'user'
+          ? await signIn('credentials', { email, password, redirect: true, callbackUrl: '/user' })
+          : (() => {
+              setError('Invalid role for the user.');
+              alert('Invalid role for the user.');
+            })();
+      
+      } else {
+        setError('User not found.');
+        alert('User not found.');
+      }
     } catch (error) {
       setError('Invalid email or password. Please try again.');
-      alert("Invalid email or passwor")
+      alert('Invalid email or password.');
     }
   };
+  
 
   return (
     <>

@@ -41,10 +41,17 @@ const TournamentPanel = () => {
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-      <div className="p-8">
-          <div className='text-white'>{session?.data?.user?.email }</div>
-          <button className='text-white' onClick={() => signOut()}>Logout</button>
-      </div>
+      <div className="p-8 bg-blue-500 rounded-2xl border-4 border-white-200 h-28 mr-10 ml-auto">
+          <div className='text-white'>
+            Usuer: {session?.data?.user?.email }
+          </div>
+              <button
+                className='text-white bg-red-500 hover:bg-red-800 py-2 px-4 rounded-2xl'
+                 onClick={() => signOut()}>
+               Logout
+            </button>
+                
+       </div>
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img
           className="mx-auto h-10 w-auto"
@@ -75,6 +82,7 @@ const TournamentPanel = () => {
         
         ))}
       </div>
+      
     </div>
   );
 };
