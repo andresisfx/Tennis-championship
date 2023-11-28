@@ -36,11 +36,10 @@ const TournamentPanel = () => {
      console.log(userData.role)
          
       if (userData.role !== 'admin') {
-     console.log("redireccionando")
         router.push('/signin');
         
       } else {
-        console.log("no entre al condicional del rol")
+        return
         
         
       }
@@ -56,7 +55,6 @@ const TournamentPanel = () => {
   }
 
 }
-// eslint-disable-next-line react-hooks/exhaustive-deps
 useEffect(() => {
   const verificarSesion = async () => {
     if (session?.data?.user?.email) {
@@ -70,7 +68,7 @@ useEffect(() => {
 
     verificarSesion();
   }
-}, [loading, session]);
+}, [loading, session,adminAllowed]);
   const handleButtonClick = (path) => {
     router.push(path);
   };

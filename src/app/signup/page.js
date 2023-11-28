@@ -18,11 +18,6 @@ function Signup() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, em, pass);
       const user = userCredential.user;
-  
-      
-      
-  
-      // Guardar información adicional en Firestore
       await setDoc(doc(db, 'usersRole', user.uid), {
         email: user.email,
         role:rol,

@@ -26,7 +26,6 @@ const TournamentPanel = () => {
 
     setChampionships(tournamentsData);
   };
-// eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     getTournaments();
   }, []);

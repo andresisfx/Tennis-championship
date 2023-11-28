@@ -31,11 +31,10 @@ const CreateChampionship = () => {
     console.log(userData.role)
         
      if (userData.role !== 'admin') {
-    console.log("redireccionando")
        router.push('/signin');
        
      } else {
-       console.log("no entre al condicional del rol")
+      return
        
        
      }
@@ -51,7 +50,7 @@ const CreateChampionship = () => {
  }
 
 }
-// eslint-disable-next-line react-hooks/exhaustive-deps
+const [championshipName, setChampionshipName] = useState('');
 useEffect(() => {
  const verificarSesion = async () => {
    if (session?.data?.user?.email) {
@@ -65,7 +64,7 @@ useEffect(() => {
 
    verificarSesion();
  }
-}, [loading, session]);
+}, [loading, session,adminAllowed]);
  
 if(loading||userRole){
  return(
@@ -74,7 +73,6 @@ if(loading||userRole){
    </>
  )
 }
-  const [championshipName, setChampionshipName] = useState('');
  
  
 
