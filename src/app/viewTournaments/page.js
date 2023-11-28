@@ -22,7 +22,10 @@ const TournamentPanel = () => {
         },}) 
 
    const router = useRouter();
-   const adminAllowed = async (email) => {
+
+useEffect(() => {
+  const adminAllowed = async (email) => {
+    console.log("admin allowed execting")
     try {
     const usersRef = collection(db, 'usersRole');
     const emailToSignQuery = query(usersRef, where('email', '==',email.toString()));
@@ -39,7 +42,7 @@ const TournamentPanel = () => {
         router.push('/signin');
         
       } else {
-        return
+      return
         
         
       }
@@ -48,14 +51,12 @@ const TournamentPanel = () => {
       return false;
     }
   } catch (error) {
-    // Maneja cualquier error relacionado con la consulta o autenticación
     console.error('Error:', error.message);
     alert('An error occurred. Please try again.');
     return false;
   }
 
 }
-useEffect(() => {
   const verificarSesion = async () => {
     if (session?.data?.user?.email) {
       adminAllowed(session.data.user.email);
@@ -68,7 +69,7 @@ useEffect(() => {
 
     verificarSesion();
   }
-}, [loading, session,adminAllowed]);
+}, [loading, session]);
   const handleButtonClick = (path) => {
     router.push(path);
   };
@@ -114,11 +115,7 @@ useEffect(() => {
       Go Back to Admin Panel
     </button>
     <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-      <img
-        className=" mx-auto  h-10 w-auto"
-        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-        alt="Your Company"
-      />
+     
       <h2 className="mt-0 text-center text-5xl font-bold leading-9 tracking-tight text-white">
         Championships panel
       </h2>

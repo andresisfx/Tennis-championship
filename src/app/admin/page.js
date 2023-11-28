@@ -18,7 +18,10 @@ const AdminPanel = () => {
         },}) 
 
    const router = useRouter();
-   const adminAllowed = async (email) => {
+   
+useEffect(() => {
+  const adminAllowed = async (email) => {
+    console.log("admin allowed execting")
     try {
     const usersRef = collection(db, 'usersRole');
     const emailToSignQuery = query(usersRef, where('email', '==',email.toString()));
@@ -50,7 +53,6 @@ const AdminPanel = () => {
   }
 
 }
-useEffect(() => {
   const verificarSesion = async () => {
     if (session?.data?.user?.email) {
       adminAllowed(session.data.user.email);
@@ -63,7 +65,7 @@ useEffect(() => {
 
     verificarSesion();
   }
-}, [loading, session,adminAllowed]);
+}, [loading, session]);
   const handleButtonClick = (path) => {
     router.push(path);
   };
@@ -129,3 +131,4 @@ if(loading||userRole){
 AdminPanel.requireAuth = true
 
 export default AdminPanel;
+

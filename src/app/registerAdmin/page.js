@@ -25,39 +25,42 @@ const AdminRegistration = () => {
        },}) 
 
 
-  const adminAllowed = async (email) => {
-   try {
-   const usersRef = collection(db, 'usersRole');
-   const emailToSignQuery = query(usersRef, where('email', '==',email.toString()));
-
-   const querySnapshot = await getDocs(emailToSignQuery);
-
-   if (!querySnapshot.empty) {
-     setuserRole(false)
-     const userDoc = querySnapshot.docs[0];
-     const userData = userDoc.data();
-    console.log(userData.role)
-        
-     if (userData.role !== 'admin') {
-       router.push('/signin');
-       
-     } else {
-return       
-       
-     }
-   } else {
-     alert('User not found.');
-     return false;
-   }
- } catch (error) {
-   console.error('Error:', error.message);
-   alert('An error occurred. Please try again.');
-   return false;
- }
-
-}
+ 
 
 useEffect(() => {
+  const adminAllowed = async (email) => {
+    console.log("admin allowed execting")
+    try {
+    const usersRef = collection(db, 'usersRole');
+    const emailToSignQuery = query(usersRef, where('email', '==',email.toString()));
+
+    const querySnapshot = await getDocs(emailToSignQuery);
+
+    if (!querySnapshot.empty) {
+      setuserRole(false)
+      const userDoc = querySnapshot.docs[0];
+      const userData = userDoc.data();
+     console.log(userData.role)
+         
+      if (userData.role !== 'admin') {
+        router.push('/signin');
+        
+      } else {
+      return
+        
+        
+      }
+    } else {
+      alert('User not found.');
+      return false;
+    }
+  } catch (error) {
+    console.error('Error:', error.message);
+    alert('An error occurred. Please try again.');
+    return false;
+  }
+
+}
  const verificarSesion = async () => {
    if (session?.data?.user?.email) {
      adminAllowed(session.data.user.email);
@@ -70,7 +73,7 @@ useEffect(() => {
 
    verificarSesion();
  }
-}, [loading, session,adminAllowed]);
+}, [loading, session]);
  const handleButtonClick = (path) => {
    router.push(path);
  };
@@ -96,19 +99,16 @@ if(loading||userRole){
     }
 
     try {
-      // Create a user in Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
-      // Access the user from the userCredential
       const user = userCredential.user;
 
-      // Set additional user data in Firestore
       await setDoc(doc(db, 'usersRole', user.uid), {
         email: email,
         role: 'admin',
       });
 
-      // Reset the form state after submitting data
+     
       setEmail('');
       setPassword('');
 

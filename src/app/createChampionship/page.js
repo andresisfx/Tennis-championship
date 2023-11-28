@@ -17,41 +17,42 @@ const CreateChampionship = () => {
        },}) 
 
   const router = useRouter();
-  const adminAllowed = async (email) => {
-   try {
-   const usersRef = collection(db, 'usersRole');
-   const emailToSignQuery = query(usersRef, where('email', '==',email.toString()));
-
-   const querySnapshot = await getDocs(emailToSignQuery);
-
-   if (!querySnapshot.empty) {
-     setuserRole(false)
-     const userDoc = querySnapshot.docs[0];
-     const userData = userDoc.data();
-    console.log(userData.role)
-        
-     if (userData.role !== 'admin') {
-       router.push('/signin');
-       
-     } else {
-      return
-       
-       
-     }
-   } else {
-     alert('User not found.');
-     return false;
-   }
- } catch (error) {
-   // Maneja cualquier error relacionado con la consulta o autenticación
-   console.error('Error:', error.message);
-   alert('An error occurred. Please try again.');
-   return false;
- }
-
-}
+  
 const [championshipName, setChampionshipName] = useState('');
 useEffect(() => {
+  const adminAllowed = async (email) => {
+    console.log("admin allowed execting")
+    try {
+    const usersRef = collection(db, 'usersRole');
+    const emailToSignQuery = query(usersRef, where('email', '==',email.toString()));
+
+    const querySnapshot = await getDocs(emailToSignQuery);
+
+    if (!querySnapshot.empty) {
+      setuserRole(false)
+      const userDoc = querySnapshot.docs[0];
+      const userData = userDoc.data();
+     console.log(userData.role)
+         
+      if (userData.role !== 'admin') {
+        router.push('/signin');
+        
+      } else {
+      return
+        
+        
+      }
+    } else {
+      alert('User not found.');
+      return false;
+    }
+  } catch (error) {
+    console.error('Error:', error.message);
+    alert('An error occurred. Please try again.');
+    return false;
+  }
+
+}
  const verificarSesion = async () => {
    if (session?.data?.user?.email) {
      adminAllowed(session.data.user.email);
@@ -64,7 +65,7 @@ useEffect(() => {
 
    verificarSesion();
  }
-}, [loading, session,adminAllowed]);
+}, [loading, session]);
  
 if(loading||userRole){
  return(
