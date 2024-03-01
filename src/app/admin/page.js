@@ -18,7 +18,10 @@ const AdminPanel = () => {
         },}) 
 
    const router = useRouter();
-   const adminAllowed = async (email) => {
+   
+useEffect(() => {
+  const adminAllowed = async (email) => {
+    console.log("admin allowed execting")
     try {
     const usersRef = collection(db, 'usersRole');
     const emailToSignQuery = query(usersRef, where('email', '==',email.toString()));
@@ -32,11 +35,10 @@ const AdminPanel = () => {
      console.log(userData.role)
          
       if (userData.role !== 'admin') {
-     console.log("redireccionando")
         router.push('/signin');
         
       } else {
-        console.log("no entre al condicional del rol")
+      return
         
         
       }
@@ -45,15 +47,12 @@ const AdminPanel = () => {
       return false;
     }
   } catch (error) {
-    // Maneja cualquier error relacionado con la consulta o autenticación
     console.error('Error:', error.message);
     alert('An error occurred. Please try again.');
     return false;
   }
 
 }
-// eslint-disable-next-line react-hooks/exhaustive-deps
-useEffect(() => {
   const verificarSesion = async () => {
     if (session?.data?.user?.email) {
       adminAllowed(session.data.user.email);
@@ -132,3 +131,4 @@ if(loading||userRole){
 AdminPanel.requireAuth = true
 
 export default AdminPanel;
+

@@ -23,7 +23,6 @@ const ParticipantsList = ({ tournamentId }) => {
     const participantsData = initialParticipants.docs.map((doc) => ({ id: doc.id, ...doc.data(), editedScore: '', isScoreValid: true }));
     setParticipants(participantsData);
   };
-// eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     getParticipants();
   }, [tournamentId]);
@@ -43,12 +42,10 @@ const ParticipantsList = ({ tournamentId }) => {
         );
       } else {
         try {
-          // Actualizar el campo score en la base de datos
           await updateDoc(doc(db, 'participants', participantId), {
             score: editedParticipant.editedScore,
           });
   
-          // Actualizar el estado local para reflejar el nuevo score
           setParticipants((prevParticipants) =>
             prevParticipants.map((participant) =>
               participant.id === participantId
@@ -59,7 +56,6 @@ const ParticipantsList = ({ tournamentId }) => {
           console.log(`Successfully updated score for participant ID: ${participantId}`);
         } catch (error) {
           console.error('Error updating score in database:', error);
-          // Manejar el error, mostrar un mensaje al usuario, etc.
         }
       }
     }

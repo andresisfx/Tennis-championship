@@ -33,12 +33,12 @@ const Welcome = () => {
 
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-300 to-blue-800 text-white overflow-hidden">
-      {/* Pelota 1 */}
+    
       <h1
         className={`absolute text-4xl font-bold text-gray-700 ${styles['animate-move1']}`}
         style={{ top: '50%', left: '30%', transform: 'translate(-50%, -50%)' }}
       >
-        Let's go
+        Let&#x27;s go
       </h1>
 
      
